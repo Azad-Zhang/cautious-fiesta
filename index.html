@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>红绿灯</title>
+  <style>
+    .red,.yellow,.green,.gray{
+      width: 80px;
+      border-radius: 50%;
+      height: 80px;
+      margin: 0 10px;
+    }
+    .red{
+      background-color: #f00;
+    }
+    .yellow{
+      background-color: #ff0;
+    }
+    .green{
+      background-color: #0f0;
+    }
+    .gray{
+      background-color: #ccc;
+    }
+    div{
+      float: left;
+    }
+    .box{
+      width: 400px;
+      height: 80px;
+      border: 5px solid #ccc;
+      padding: 20px 50px;
+      margin: 0 auto;
+    }
+    .count{
+      width: 50px;
+      font-size: 3.5rem;
+      height: 3.5rem;
+      margin-top: 5px;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div id="red"></div>
+    <div id="yellow"></div>
+    <div id="green"></div>
+    <div id="count" class="count"></div>
+  </div>
+  <script>
+    var lamp={
+      red:{
+        time:30,//持续时间，用它来设置时间
+        obj:document.getElementById("red"),//获取自身，用它来完成获取对象
+        style:["red","gray","gray"],//设置当前对象在线时，其他对象的属性，用它来完成对象属性的设置
+        next:"green",//下一个！！！用它来完成变量的转换
+      },
+      yellow:{
+        time:5,
+        obj:document.getElementById("yellow"),
+        style:["gray","yellow","gray"],
+        next:"red",
+      },
+      green:{
+        time:20,
+        obj:document.getElementById("green"),
+        style:["gray","gray","green"],
+        next:"yellow",
+      },
+      //对象类的转换！！！
+      changeStyle(style){
+        this.red.obj.className=style[0];
+        //style变量为lamp下面的任意一个属性的style属性，例：lamp.red.style。然后表达式的含义为lamp下的属性red下的obj属性，也就是自身，再设置类属性。
+        this.yellow.obj.className=style[1];
+        this.green.obj.className=style[2];
+      }
+    };
+    //设置倒计时！！！
+    var count={
+      obj:document.getElementById("count"),
+      change:function(num){
+        this.obj.innerHTML=(num<10)?("0"+num):num;//获取自身，设置内容，三元运算符规定格式
+      }
+    };
+    //首先初始化
+    var now=lamp.green;
+    var time=now.time;
+    lamp.changeStyle(now.style);
+    count.change(time);
+    setInterval(timer,1000);
+    function timer(){
+      if(--time<=0){
+        now=lamp[now.next];
+        time=now.time;
+        lamp.changeStyle(now.style);
+      }
+      count.change(time);
+    }
+  </script>
+</body>
+</html>
